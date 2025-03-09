@@ -1,0 +1,20 @@
+ITF000
+Da Nang
+Ho Chi Minh
+10/04/2025
+2:30 PM
+1320000
+
+ITF001
+Da Nang
+Ha Noi
+3/5/2025
+4:00 AM 
+2150000
+
+ITF002
+Da Nang
+Can Tho 
+12/04/2025
+7:15 PM
+1125000
