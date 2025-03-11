@@ -138,7 +138,7 @@ void displayFlightInformationList(vector<ticket>& flightList) {
 	ReadFile.close();
 }
 
-int selectFlight(const vector<ticket>& flightList) {
+int selectFlight(vector<ticket>& flightList) {
     cout << "\t\t\t\t\tHay chon chuyen bay phu hop voi lich trinh cua ban" << endl; 
     cout << "\t\t\t\t\tBan se chon chuyen bay nao: "; 
     int choice, index = 0; 
@@ -165,7 +165,7 @@ int selectFlight(const vector<ticket>& flightList) {
     return index;
 }
 
-void importSeatingChartData(vector<vector<string>> &seatingChart) {
+void importSeatingChartData(vector<vector<string>> &takenSeatingChart) {
     ifstream readFile("BookedSeatingChart.txt");
     if (!readFile) {
         readFile.open("SeatingChart.txt");
@@ -182,25 +182,23 @@ void importSeatingChartData(vector<vector<string>> &seatingChart) {
         while (ss >> token) {
             row.push_back(token);
         }
-        seatingChart.push_back(row);
+        takenSeatingChart.push_back(row);
     }
     readFile.close();
 }
 
-
-void displaySeatingChart(vector<vector<string>> seatingChart) {
+void displaySeatingChart(vector<vector<string>> takenSeatingChart) {
 	cout << endl << "\t\t\t\t\t   === SO DO GHE NGOI MAY BAY ===" << endl; 
 	cout << "\t\t\t\t\t************************************" << endl;
-	for (int i = 0; i<seatingChart.size(); i++) {
+	for (int i = 0; i<takenSeatingChart.size(); i++) {
 		cout << "\t\t\t\t\t      ";
-		for (int j = 0; j<seatingChart[i].size(); j++) {
-			cout << seatingChart[i][j] << " "; 
+		for (int j = 0; j<takenSeatingChart[i].size(); j++) {
+			cout << takenSeatingChart[i][j] << " "; 
 		}
 		cout << endl; 
 	}
 	cout << "\t\t\t\t\t************************************" << endl;
 }
-
 
 string selectSeat(vector<vector<string>> &takenSeatingChart, map<string, string>& check) {
     string choice;
@@ -301,15 +299,14 @@ double ticketPrice(string choice) {
 	}
 }
 
-void addTicket(node **head) {
+void addTicket(node **head, vector<vector<string>>& takenSeatingChart) {
     ticket ticket;
     vector<struct ticket> flightList; 
     displayFlightInformationList(flightList); 
     ticket = flightList[selectFlight(flightList)];
     ticket.customer = importPersonalInformation();
     savePersonalInformation(ticket.customer);
-    
-    vector<vector<string>> takenSeatingChart;
+   
     importSeatingChartData(takenSeatingChart);
     displaySeatingChart(takenSeatingChart);
     
@@ -334,6 +331,29 @@ void addTicket(node **head) {
     cout << endl;
 }
 
+void printTickets(node *head) {
+    if (head == NULL) {
+        cout << "\t\t\t\t\t  Chua co ve nao duoc dat!" << endl;
+        return;
+    }
+    cout << "\t\t\t\t\t    === DANH SACH VE DA DAT ===" << endl;
+    cout << "\t\t\t\t\t************************************";
+    
+    node *temp = head;0
+    while (temp != NULL) {
+    	cout << endl << "\t\t\t\t\t  Tong cong so ve da dat: " << numberOfTickets(head) << " ve" << endl;
+        cout << "\t\t\t\t\t------------------------------------" << endl;
+        cout << "\t\t\t\t\t  Ma so chuyen bay: " << temp->data.flightCode << endl;
+        cout << "\t\t\t\t\t  Khach hang: " << temp->data.customer.names << endl;
+        cout << "\t\t\t\t\t  Chuyen bay: " << temp->data.departure << " -> " << temp->data.destination << endl;
+        cout << "\t\t\t\t\t  Ngay: " << temp->data.date << " - Gio: " << temp->data.time << endl;
+        cout << "\t\t\t\t\t  Gia ve: " << temp->data.price << " - Ma ghe: " << temp->data.seatCode << endl;
+        cout << "\t\t\t\t\t------------------------------------" << endl;
+        temp = temp->next;
+    }
+    cout << "\t\t\t\t\t************************************" << endl; 
+}
+
 void resetSeatingChart() {
     ifstream ReadFile("SeatingChart.txt");
     if (!ReadFile) {
@@ -354,48 +374,6 @@ void resetSeatingChart() {
     cout << "\t\t\t\t\t      SO DO GHE DA DUOC RESET" << endl;
 }
 
-void bookTicket(node **head) {
-	while (true) {
-		cout << "\t\t\t\t\t Phan dat ve"; 
-		cout << "\t\t\t\t\t
-		int choice; cin >> choice; 
-		switch(choice) {
-			case 1: 
-				addTicket(head); 
-				break; 
-				
-				
-				
-				
-				
-			default: 
-				return; 
-		}
-	}
-}
-
-
-void printTickets(node *head) {
-    if (head == NULL) {
-        cout << "\t\t\tChua co ve nao duoc dat!" << endl;
-        return;
-    }
-    cout << "\t\t\t\t\t    === DANH SACH VE DA DAT ===" << endl;
-    cout << "\t\t\t\t\t************************************";
-    node *temp = head;
-    while (temp != NULL) {
-    	cout << endl << "\t\t\t\t\t  Tong cong so ve da dat: " << numberOfTickets(head) << " ve" << endl;
-        cout << "\t\t\t\t\t------------------------------------" << endl;
-        cout << "\t\t\t\t\t  Khach hang: " << temp->data.customer.names << endl;
-        cout << "\t\t\t\t\t  Chuyen bay: " << temp->data.departure << " -> " << temp->data.destination << endl;
-        cout << "\t\t\t\t\t  Ngay: " << temp->data.date << " - Gio: " << temp->data.time << endl;
-        cout << "\t\t\t\t\t  Gia ve: " << temp->data.price << " - Ma ghe: " << temp->data.seatCode << endl;
-        cout << "\t\t\t\t\t------------------------------------" << endl;
-        temp = temp->next;
-    }
-    cout << "\t\t\t\t\t************************************" << endl; 
-}
-
 void end() {
 	cout << endl; 
 	cout << "\t\t\t\t\t************************************" << endl; 
@@ -404,41 +382,74 @@ void end() {
 	cout << endl;
 }
 
-void menu() { 
+void cancelTicket(node** head, string flightCode) {
+    if (*head == NULL) {
+		cout << "\t\t\t\t\t  Chua co ve nao duoc dat!" << endl;
+		return;
+    }
+    node* temp = *head; 
+	if (temp->data.flightCode == flightCode) {
+		*head = temp->next;
+		delete temp;
+		cout << "\t\t\t\t\t  Ve da duoc huy thanh cong!" << endl;
+		return;
+	}
+}
+
+void menu(node* head) { 
+    vector<vector<string>> takenSeatingChart;
 	while (true) {
-    	setColor(10);	
-        cout << "\t\t\t\t\t ************************************" << endl;
+    	SetColor(10);	
+        cout << "\t\t\t\t\t************************************" << endl;
         cout << "\t\t\t\t\tChao mung den he thong dat ve may bay" << endl;
         cout << "\t\t\t\t\t          ---ITF-Airways---" << endl;
-        setColor(14); 
+        SetColor(14); 
         cout << "\t\t\t\t\t    1. Dat ve may bay" << endl;
         cout << "\t\t\t\t\t    2. Cancel a ticket" << endl;
-        cout << "\t\t\t\t\t    5. Setting the personal information" << endl;
+		cout << "\t\t\t\t\t    3. Print tickets" << endl;
+		cout << "\t\t\t\t\t    4. Print booked seating chart" << endl;
         cout << "\t\t\t\t\t    0. Exit" << endl;
-        setColor(10); 
-        cout << "\t\t\t\t\t ************************************" << endl;
+        SetColor(10); 
+        cout << "\t\t\t\t\t************************************" << endl;
         cout << "\t\t\t\t\t    Please enter your choice: ";
 
         int choice; 
         cin >> choice; 
         cin.ignore();
+        cout << endl; 
         
-        switch(choice) {
-        	case 1: 
-        		bookTicket(&head);
-        		printTickets(head); 
-        		break; 
-        		
-        		
-        		
-        	default: 
-        		return;
-		}
+       	switch(choice) {
+       		case 1: 
+				addTicket(&head, takenSeatingChart);
+       			break; 
+            case 2: {
+            	cout << "\t\t\t\t\t Ban muon xoa ma so chuyen bay nao?";
+        		string flightCode; getline(cin, flightCode);
+                if (flightCode.length() != 6) {
+                    cout << "\t\t\t\t\t  Ma so chuyen bay khong hop le!" << endl;
+                    break;
+                }
+				cancelTicket(&head, flightCode);
+				break; 
+			}
+            case 3: 
+				printTickets(head);
+				break;
+			case 4:
+				displaySeatingChart(takenSeatingChart);
+				break;
+			case 0:
+				return;
+			default:
+				cout << "\t\t\t\t\t  Lua chon khong hop le!" << endl;
+				break;
+	   }
+	}
 }
 
 int main() {
 	node *head = NULL;
-	menu();
+	menu(head);
 	end();
 	resetPersonalInformation(); 
 	resetSeatingChart(); 
