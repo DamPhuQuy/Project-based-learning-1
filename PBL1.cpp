@@ -7,7 +7,7 @@
 #include <set>
 #include <windows.h>
 #include <map>
-
+#include <iomanip>
 using namespace std;
 
 int originalPrice = 0; 
