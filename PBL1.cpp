@@ -339,7 +339,7 @@ void printTickets(node *head) {
     cout << "\t\t\t\t\t    === DANH SACH VE DA DAT ===" << endl;
     cout << "\t\t\t\t\t************************************";
     
-    node *temp = head;0
+    node *temp = head;
     while (temp != NULL) {
     	cout << endl << "\t\t\t\t\t  Tong cong so ve da dat: " << numberOfTickets(head) << " ve" << endl;
         cout << "\t\t\t\t\t------------------------------------" << endl;
